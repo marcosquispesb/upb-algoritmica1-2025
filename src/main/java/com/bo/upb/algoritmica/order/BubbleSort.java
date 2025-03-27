@@ -65,60 +65,6 @@ public class BubbleSort {
     }
     //endregion
 
-    //region [Radix Sort] --------------------------------------------------------------------------
-    public static int max(int[] values) throws Exception {
-//        int max = Integer.MIN_VALUE;
-//        for (int value : values) {
-//            if (value > max)
-//                max = value;
-//        }
-//        return max;
-        return Arrays.stream(values).max() // map, filter
-                .orElseThrow(() -> new Exception("No se encontro ningun valor"));
-    }
-
-    public static int countDigits(int nro) {
-        int length = 0;
-        while (nro > 0) {
-            nro = nro / 10;
-            length++;
-        }
-        return length;
-    }
-
-    // crear buckets (arreglo de listas)
-    // encontrar max nro de digitos de los numeros del arreglo values
-    // iteramos values y pasamos los numeros al bucket
-    // pasamos del bucket al arreglo
-    // limpiar buckets
-    public void radixSort(int[] values) throws Exception {
-        LinkedList<Integer>[] buckets = new LinkedList[10];
-        for (int i = 0; i < buckets.length; i++) {
-            buckets[i] = new LinkedList<>();
-        }
-
-        int modulo = 1;
-        int k = (int) Math.log10(max(values)) + 1;
-        for (int i = 0; i < k; i++) { // definir posicion del digito a evaluar
-            for (int j = 0; j < values.length; j++) { // iterar elementos del arreglo
-                int dig = (values[j] / modulo) % 10;
-                buckets[dig].add(values[j]);
-            }
-
-            int pos = 0;
-            for (int j = 0; j < buckets.length; j++) {
-                for (Integer nro : buckets[j]) {
-                    values[pos] = nro;
-                    pos++;
-                }
-                buckets[j].clear();
-            }
-
-            modulo *= 10;
-        }
-    }
-    //endregion
-
     public static void main(String[] args) throws Exception {
         int[] values;
         BubbleSort bubbleSort = new BubbleSort();
@@ -128,16 +74,7 @@ public class BubbleSort {
         values = new int[] {1, 3, 4, 2, 5, 6, 7, 8, 9};
         //bubbleSort.bubbleSort(values);
         //bubbleSort.bubbleSortImproved1(values);
-//        bubbleSort.bubbleSortImproved2(values);
-//        System.out.println(Arrays.toString(values));
-
-        // -----------------------------------------------
-
-        System.out.println();
-        values = new int[] {8920, 56, 5221, 635, 6, 10, 8691, 457, 26};
-        //values = new int[] {1234, 65, 63, 1245};
-        //values = new int[] {352, 62, 56, 3, 16, 353};
-        bubbleSort.radixSort(values);
+        bubbleSort.bubbleSortImproved2(values);
         System.out.println(Arrays.toString(values));
     }
 }
