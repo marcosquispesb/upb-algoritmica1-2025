@@ -66,6 +66,27 @@ public class RadixSort {
         }
     }
 
+    public void radixSort(int[] values) throws Exception {
+        int[] positives = Arrays.stream(values).filter(x -> x > 0).toArray();
+        int[] negatives = Arrays.stream(values).filter(x -> x < 0).map(x -> x*(-1)).toArray();
+        System.out.println("negatives: " + Arrays.toString(negatives));
+
+        radixSortPositive(positives);
+        radixSortPositive(negatives);
+
+        int c = 0;
+        for (int i = negatives.length - 1; i > -1 ; i--) {
+            values[c] = negatives[i] * (-1);
+            c++;
+        }
+
+        for (int i = 0; i < positives.length; i++) {
+            values[c] = positives[i];
+            c++;
+        }
+    }
+    //endregion
+
     public int getCode(char c) {
         int code = (int) c;
         if (code >= 97)
@@ -106,27 +127,6 @@ public class RadixSort {
             //System.out.println("   " + Arrays.toString(values));
         }
     }
-
-    public void radixSort(int[] values) throws Exception {
-        int[] positives = Arrays.stream(values).filter(x -> x > 0).toArray();
-        int[] negatives = Arrays.stream(values).filter(x -> x < 0).map(x -> x*(-1)).toArray();
-        System.out.println("negatives: " + Arrays.toString(negatives));
-
-        radixSortPositive(positives);
-        radixSortPositive(negatives);
-
-        int c = 0;
-        for (int i = negatives.length - 1; i > -1 ; i--) {
-            values[c] = negatives[i] * (-1);
-            c++;
-        }
-
-        for (int i = 0; i < positives.length; i++) {
-            values[c] = positives[i];
-            c++;
-        }
-    }
-    //endregion
 
     public static void main(String[] args) throws Exception {
         int[] values;
