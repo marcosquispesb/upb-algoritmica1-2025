@@ -106,12 +106,13 @@ public class RadixSort {
 
         int k = maxLength(values);
         System.out.println(k);
-        for (int i = 0; i < k; i++) { // definir posicion del digito a evaluar
+//        for (int i = 0; i < k; i++) { // definir posicion del digito a evaluar
+        for (int i = k - 1; i > -1; i--) { // definir posicion del digito a evaluar
             for (int j = 0; j < values.length; j++) { // iterar elementos del arreglo
-                int posAux = values[j].length() - i - 1;
+                //int posAux = i; //values[j].length() - i - 1;
                 int dig = 0;
-                if (posAux > -1)
-                    dig = getCode(values[j].charAt(posAux));
+                if (i < values[j].length())
+                    dig = getCode(values[j].charAt(i));
 
                 buckets[dig].add(values[j]);
             }
@@ -147,6 +148,7 @@ public class RadixSort {
         //valuesStr = new String[] {"ab", "c", "cba", "a", "ba", "z"}; // a, c, z, ab, ba, cba
         //valuesStr = new String[] {"Ab", "c", "cba", "a", "BA", "Z"}; // a, c, Z, Ab, BA, cba
         valuesStr = new String[] {"ab", "a", "b", "ba", "abc"}; // a, b, ab, ba, abc
+        //Arrays.sort(valuesStr);
         radixSort.radixSortString(valuesStr);
         System.out.println(Arrays.toString(valuesStr));
 
