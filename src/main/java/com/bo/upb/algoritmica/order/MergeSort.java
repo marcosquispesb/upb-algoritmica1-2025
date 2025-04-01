@@ -10,17 +10,17 @@ import java.util.Arrays;
  */
 public class MergeSort {
 
-    public static int[] mergeSort(int[] values) {
+    public static void mergeSort(int[] values) {
         //System.out.println(Arrays.toString(values));
         if (values.length == 1)
-            return values;
+            return;
 
         int k = values.length / 2;
         int[] left = Arrays.copyOfRange(values, 0, k);
         int[] right = Arrays.copyOfRange(values, k, values.length);
 
-        left = mergeSort(left);
-        right = mergeSort(right);
+        mergeSort(left);
+        mergeSort(right);
 
         int l = 0;
         int r = 0;
@@ -43,13 +43,11 @@ public class MergeSort {
             }
             i++;
         }
-
-        return values;
     }
 
     public static void main(String[] args) {
         int[] values = {7, 6, 1, 5, 4, 3};
-        values = mergeSort(values);
+        mergeSort(values);
         System.out.println(Arrays.toString(values));
     }
 }
