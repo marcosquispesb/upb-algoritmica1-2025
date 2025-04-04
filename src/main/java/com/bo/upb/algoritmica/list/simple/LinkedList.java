@@ -27,11 +27,11 @@ public class LinkedList {
             return;
         }
 
-        Node aux = first;
-        while (aux.hasNext()) {
-            aux = aux.getNext();
+        Node node = first;
+        while (node.hasNext()) {
+            node = node.getNext();
         }
-        aux.setNext(new Node(value));
+        node.setNext(new Node(value));
         size++;
     }
 
@@ -48,6 +48,41 @@ public class LinkedList {
             node = node.getNext();
         }
         return -1;
+    }
+
+    private int sum() {
+        int suma = 0;
+        Node node = first;
+        while (node != null) {
+            suma = suma + node.getValue();
+            node = node.getNext();
+        }
+        return suma;
+    }
+
+    private int getSize2() {
+        int count = 0;
+        Node node = first;
+        while (node != null) {
+            count++;
+            node = node.getNext();
+        }
+        return count;
+    }
+
+    private Integer max() {
+        if (first == null) // Por si la lista esta vacia
+            return null;
+
+        int max = Integer.MIN_VALUE;
+        Node node = first;
+        while (node != null) {
+            if (node.getValue() > max)
+                max = node.getValue();
+            node = node.getNext();
+        }
+
+        return max;
     }
 
     @Override
@@ -70,6 +105,9 @@ public class LinkedList {
         l.add(40);
         System.out.println(l);
 
-        System.out.println(l.get(5));
+        System.out.println(l.get(2));
+        System.out.println(l.sum());
+        System.out.println(l.getSize2());
+        System.out.println(l.max());
     }
 }
