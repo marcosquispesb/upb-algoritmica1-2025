@@ -20,6 +20,11 @@ public class LinkedList {
         size = 0;
     }
 
+    public void add(int ...values) {
+        for (int value : values) {
+            add(value);
+        }
+    }
     public void add(int value) {
         if (first == null) {
             first = new Node(value);
@@ -85,6 +90,31 @@ public class LinkedList {
         return max;
     }
 
+    public void remove(int value) {
+        if (first == null)
+            return;
+
+        Node node = first;
+        Node prev = null;
+        while (node != null) {
+            if (node.getValue() == value) {
+                if (prev != null) {
+                    prev.setNext(node.getNext());
+                    node.setNext(null);
+                    node = prev.getNext();
+                } else {
+                    first = node.getNext();
+                    node.setNext(null);
+                    node = first;
+                }
+                size--;
+                continue;
+            }
+            prev = node;
+            node = node.getNext();
+        }
+    }
+
     @Override
     public String toString() {
         String s = "";
@@ -99,15 +129,18 @@ public class LinkedList {
 
     public static void main(String[] args) throws Exception {
         LinkedList l = new LinkedList();
-        l.add(10);
-        l.add(20);
-        l.add(30);
-        l.add(40);
+//        l.add(10);
+//        l.add(20);
+//        l.add(30);
+//        l.add(40);
+        l.add(4, 4, 5, 4, 6);
+        System.out.println(l);
+        l.remove(4);
         System.out.println(l);
 
-        System.out.println(l.get(2));
-        System.out.println(l.sum());
-        System.out.println(l.getSize2());
-        System.out.println(l.max());
+//        System.out.println(l.get(2));
+//        System.out.println(l.sum());
+//        System.out.println(l.getSize2());
+//        System.out.println(l.max());
     }
 }

@@ -40,6 +40,11 @@ public class Node {
         return left != null && right != null;
     }
 
+    public boolean areHisChildren(int value1, int value2) {
+        return (left.value == value1 && right.value == value2)
+                || (left.value == value2 && right.value == value1);
+    }
+
     public List<Node> getChildren() {
         List<Node> children = new ArrayList<>(2);
         if (left != null)

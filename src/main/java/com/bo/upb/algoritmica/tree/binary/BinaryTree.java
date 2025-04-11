@@ -25,11 +25,22 @@ public class BinaryTree implements TBPrint {
         size = 0;
     }
 
+    public BinaryTree(int valueRoot) {
+        root = new Node(valueRoot);
+        size = 1;
+    }
+
     public void putRoot(int value) {
         root = new Node(value);
         size = 1;
     }
 
+    public void putChildren(int valueParent, Integer valueLeft, Integer valueRight) {
+        if (valueLeft != null)
+            putLeft(valueParent, valueLeft);
+        if (valueRight != null)
+            putRight(valueParent, valueRight);
+    }
     public void putLeft(int valueParent, int value) {
         Node parent = getNode(valueParent, root);
         if (parent != null) {
@@ -89,6 +100,24 @@ public class BinaryTree implements TBPrint {
         return Math.max(maximo, node.getValue());
     }
 
+    // debe retornar la cantidad de nodos hojas que hay en el arbol
+    public int countLeaves(Node node) {
+        return 0;
+    }
+
+    // retorna true si value1 y value2 tienen el mismo padre
+    public boolean areSiblings(int value1, int value2, Node node) {
+        if (node == null || node.isLeaf())
+            return false;
+
+        if (node.hasTwoSon()) {
+            if (node.areHisChildren(value1, value2))
+                return true;
+        }
+
+        return areSiblings(value1, value2, node.getLeft()) || areSiblings(value1, value2, node.getRight());
+    }
+
     public void print(Node node) {
         if (node == null)
             return;
@@ -98,20 +127,47 @@ public class BinaryTree implements TBPrint {
         print(node.getRight());
     }
 
+    public int depth(Node node) {
+        if (node == null)
+            return 0;
+        if (node.isLeaf())
+            return 1;
+
+        int izq = depth(node.getLeft()); // 1
+        int der = depth(node.getRight()); // 0
+        return Math.max(izq, der) + 1;
+    }
+
+    public boolean isFull(Node node) {
+        if (node == null)
+            return false;
+        if (node.isLeaf())
+            return true;
+        return isFull(node.getLeft()) && isFull(node.getRight());
+    }
+
     public static void main(String[] args) {
-        BinaryTree t = new BinaryTree();
-        t.putRoot(100);
-        t.putLeft(100, 20);
-        t.putRight(100, 30);
-        t.putRight(20, 15);
-        t.putLeft(30, 25);
+        BinaryTree t = new BinaryTree(10);
+//        t.putChildren(10, 20, 30);
+//        t.putChildren(20, null, 15);
+//        t.putChildren(30, 25, null);
+//        t.putChildren(25, null, 28);
+
+//        t.putChildren(10, 20, 30);
+//        t.putChildren(20, 40, 50);
+
+        t.putChildren(10, 20, 30);
+        t.putChildren(20, 40, 50);
+        t.putChildren(30, 60, 70);
+        t.putChildren(60, 80, 90);
 
         //t.print(t.root);
         TBPrintUtil.print(t);
         System.out.println();
         //System.out.println("size2: " + t.getSize2(t.root));
-        System.out.println("sum: " + t.sum(t.root));
-        System.out.println("max: " + t.max(t.root));
+//        System.out.println("sum: " + t.sum(t.root));
+//        System.out.println("max: " + t.max(t.root));
+        System.out.println("depth: " + t.depth(t.root));
         //System.out.println("fin");
     }
 }
