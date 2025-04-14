@@ -5,6 +5,9 @@ import com.bo.upb.algoritmica.tree.print.TBPrintUtil;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * BinaryTree
  *
@@ -146,6 +149,55 @@ public class BinaryTree implements TBPrint {
         return isFull(node.getLeft()) && isFull(node.getRight());
     }
 
+    public void bfs() {
+        if (root == null)
+            return;
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+        Node node;
+        while (!queue.isEmpty()) {
+            node = queue.poll();
+            System.out.print(node.getValue() + " ");
+            if (!node.isLeaf())
+                queue.addAll(node.getChildren());
+        }
+    }
+
+    public boolean isPerfect() {
+        return (Math.pow(2, depth(root)) - 1) == size;
+    }
+
+    public void addByLevel(Integer value) {
+        if (root == null) {
+            root = new Node(value);
+            size = 1;
+            return;
+        }
+
+        int level = depth(root) + (isPerfect() ? 0 : - 1);
+        addByLevel(root, null, value, level);
+    }
+
+    public boolean addByLevel(Node node, Node parent, Integer value, int level) {
+        if (level == 0) {
+            if (node == null) {
+                if (parent.getLeft() == null) {
+                    parent.setLeft(new Node(value));
+                } else { // right es null
+                    parent.setRight(new Node(value));
+                }
+                size++;
+                return true;
+            }
+            return false;
+        }
+
+        boolean izq = addByLevel(node.getLeft(), node, value, level - 1);
+        if (izq)
+            return izq;
+        return addByLevel(node.getRight(), node, value, level - 1);
+    }
+
     public static void main(String[] args) {
         BinaryTree t = new BinaryTree(10);
 //        t.putChildren(10, 20, 30);
@@ -156,18 +208,33 @@ public class BinaryTree implements TBPrint {
 //        t.putChildren(10, 20, 30);
 //        t.putChildren(20, 40, 50);
 
-        t.putChildren(10, 20, 30);
-        t.putChildren(20, 40, 50);
-        t.putChildren(30, 60, 70);
-        t.putChildren(60, 80, 90);
-
-        //t.print(t.root);
-        TBPrintUtil.print(t);
-        System.out.println();
-        //System.out.println("size2: " + t.getSize2(t.root));
-//        System.out.println("sum: " + t.sum(t.root));
-//        System.out.println("max: " + t.max(t.root));
-        System.out.println("depth: " + t.depth(t.root));
+//        t.putChildren(10, 20, 30);
+//        t.putChildren(20, 40, 50);
+//        t.putChildren(30, 60, 70);
+        //t.putChildren(60, 80, 90);
+//
+//        //t.print(t.root);
+//        TBPrintUtil.print(t);
+//        System.out.println();
+//        //System.out.println("size2: " + t.getSize2(t.root));
+////        System.out.println("sum: " + t.sum(t.root));
+////        System.out.println("max: " + t.max(t.root));
+//        System.out.println("depth: " + t.depth(t.root));
         //System.out.println("fin");
+
+//        t.bfs();
+        t = new BinaryTree();
+        for (int i = 1; i <= 10; i++) {
+            t.addByLevel(i * 10);
+        }
+        TBPrintUtil.print(t);
+
+//        Queue<Integer> queue = new LinkedList<>();
+//        queue.add(10);
+//        queue.add(20);
+//        queue.add(30);
+//        System.out.println(queue.poll());
+//        System.out.println(queue.poll());
+//        System.out.println(queue);
     }
 }

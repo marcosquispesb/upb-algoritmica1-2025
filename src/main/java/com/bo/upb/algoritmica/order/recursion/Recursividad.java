@@ -45,7 +45,7 @@ public class Recursividad {
 
         //System.out.println(rec.factorialRec(4));
 
-        System.out.println(rec.fibonacciRec(92)); // 40 92
+        System.out.println(rec.fibonacciRec(46)); // 40, 46, 92
     }
 
 }

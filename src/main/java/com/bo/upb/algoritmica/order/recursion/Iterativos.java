@@ -22,20 +22,32 @@ public class Iterativos {
         return result;
     }
 
-    long fibo(long[] values) {
+    long fibo(int n) {
         long f2 = 1;
         long f1 = 0;
         long f = 0;
-        for (int i = 0; i < values.length; i++) {
+        for (int i = 0; i < n; i++) {
             f = f1 + f2;
-
-            values[i] = f;
             f2 = f1;
             f1 = f;
         }
-
         return f;
     }
+
+//    long fibo(long[] values) {
+//        long f2 = 1;
+//        long f1 = 0;
+//        long f = 0;
+//        for (int i = 0; i < values.length; i++) {
+//            f = f1 + f2;
+//
+//            values[i] = f;
+//            f2 = f1;
+//            f1 = f;
+//        }
+//
+//        return f;
+//    }
 
     public static void main(String[] args) {
         Iterativos ite = new Iterativos();
@@ -48,9 +60,16 @@ public class Iterativos {
         long[] fiboValues;
 
         timeMillis = System.currentTimeMillis();
-        fiboValues = new long[92];
-        ite.fibo(fiboValues);
-        System.out.println(String.format("fibo: %s time: %s ms", Arrays.toString(fiboValues), System.currentTimeMillis() - timeMillis));
+        //fiboValues = new long[92];
+        //ite.fibo(fiboValues);
+        //System.out.println(String.format("fibo: %s time: %s ms", Arrays.toString(fiboValues), System.currentTimeMillis() - timeMillis));
+
+//        System.out.println(ite.fibo(1));
+//        System.out.println(ite.fibo(2));
+//        System.out.println(ite.fibo(3));
+//        System.out.println(ite.fibo(4));
+//        System.out.println(ite.fibo(5));
+        System.out.println(ite.fibo(46));
 
         //int[] values = {7, 6, 1, 5, 4, 3};
         //int[] numbers = new int[] {10, 5};
