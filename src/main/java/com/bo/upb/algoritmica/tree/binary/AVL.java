@@ -109,30 +109,63 @@ public class AVL implements TBPrint {
         return child;
     }
 
-    private int balance(Node parent, Node node) {
+//    private int balance(Node parent, Node node) {
+//        if (node == null)
+//            return 0;
+//        if (node.isLeaf())
+//            return 1;
+//
+//        int izq = balance(node, node.getLeft());
+//        int der = balance(node, node.getRight());
+//        int fe = der - izq;
+//        //System.out.println("node: " + node.getValue() + "  fe: " + fe);
+//        if (fe == 2) {
+//            // actualizar hijo que corresponda (izq o der)
+//            // si se esta rotando el root, actualizar el puntero root
+//            parent.setRight(rotateLeft(node));
+//            System.out.println("desbalance der: " + node.getValue() + "  fe: " + fe);
+//            // retornar la nueva altura max
+//        } else if (fe == -2) {
+//            // actualizar hijo que corresponda (izq o der)
+//            // si se esta rotando el root, actualizar el puntero root
+//            rotateRight(node);
+//            System.out.println("desbalance izq: " + node.getValue() + "  fe: " + fe);
+//            // retornar la nueva altura max
+//        }
+//
+//        return Math.max(izq, der) + 1;
+//    }
+
+    private int balance(Node node, Node parent) {
         if (node == null)
             return 0;
         if (node.isLeaf())
             return 1;
 
-        int izq = balance(node, node.getLeft());
-        int der = balance(node, node.getRight());
+        int izq = balance(node.getLeft(), node);
+        int der = balance(node.getRight(), node);
         int fe = der - izq;
-        //System.out.println("node: " + node.getValue() + "  fe: " + fe);
-        if (fe == 2) {
-            // actualizar hijo que corresponda (izq o der)
-            // si se esta rotando el root, actualizar el puntero root
-            parent.setRight(rotateLeft(node));
-            System.out.println("desbalance der: " + node.getValue() + "  fe: " + fe);
-            // retornar la nueva altura max
-        } else if (fe == -2) {
-            // actualizar hijo que corresponda (izq o der)
-            // si se esta rotando el root, actualizar el puntero root
-            rotateRight(node);
-            System.out.println("desbalance izq: " + node.getValue() + "  fe: " + fe);
-            // retornar la nueva altura max
+        if (fe == -2) { // desbalance por la izq
+            System.out.println("desbalance por la izq node: " + node.getValue());
+            if (parent == null) {
+                root = rotateRight(node);
+            } else if (parent.getLeft() != null && parent.getLeft().getValue() == node.getValue()) {
+                parent.setLeft(rotateRight(node));
+            } else {
+                parent.setRight(rotateRight(node));
+            }
+            return Math.max(balance(node.getLeft(), node), balance(node.getRight(), node))  + 1;
+        } else if (fe == 2) { // desbalance por la der
+            System.out.println("desbalance por la der node: " + node.getValue());
+            if (parent == null) {
+                root = rotateLeft(node);
+            } else if (parent.getLeft() != null && parent.getLeft().getValue() == node.getValue()) {
+                parent.setLeft(rotateLeft(node));
+            } else {
+                parent.setRight(rotateLeft(node));
+            }
+            return Math.max(balance(node.getLeft(), node), balance(node.getRight(), node))  + 1;
         }
-
         return Math.max(izq, der) + 1;
     }
 
@@ -141,12 +174,25 @@ public class AVL implements TBPrint {
         //t.addAll(19, 7, 10, 16, 20, 8, 9, 13, 40, 4, 9);
 
         t = new AVL();
+        // 24 elementos
+        //17, 38, 90, 14, 89, 11, 93, 29, 98, 34, 79, 32, 41, 71, 87, 91, 21, 80, 31, 52, 97, 62, 13, 74
+        //t.addAll(17, 38, 90, 14, 89, 11, 93, 29, 98, 34, 79, 32, 41, 71, 87, 91, 21, 80, 31, 52, 97, 62, 13, 74); // no imprime bien el 4
+
+        // 10 elementos
+        //33, 25, 28, 40, 66, 18, 15, 100, 75, 50
+        t.addAll(33, 25, 28, 40, 66, 18, 15, 100, 75, 50); // ok
+        //rdi root, ri, rd, rid, rid
+
+        // 11 elementos
+        //60, 50, 40, 70, 65, 55, 30, 35, 57, 58, 20    68, 25, 22
+        //t.addAll(60, 50, 40, 70, 65, 55, 30, 35, 57, 58, 20, 68, 25, 22); // ok
+
 //        for (int i = 0; i < 5; i++) {
 //            t.add(i + 1);
 //        }
 //        t.addAll(33, 25, 28, 40, 66, 18, 15, 100, 75, 50); //33, 25, 28, 40, 66, 18, 15, 100, 75, 50);
 //
-        t.addAll(16, 10, 4, 2);
+//        t.addAll(16, 10, 4, 2);
 //        t.rotateRight(t.root);
 
 //        t.addAll(16, 10);
@@ -166,7 +212,7 @@ public class AVL implements TBPrint {
         //Node node = t.rotateLeft(t.root);
         //System.out.println(node);
 
-        System.out.println();
+//        System.out.println();
 //        t = new AVL();
 //        for (int i = 0; i < 20; i++) {
 //            t.add(i + 1);

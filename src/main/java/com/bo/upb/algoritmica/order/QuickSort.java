@@ -16,6 +16,46 @@ public class QuickSort {
         values[j] = aux;
     }
 
+//    public static void quickSort(int[] values, int pi, int pf) {
+//        if (pi == pf)
+//            return;
+//
+//        boolean goRight = true;
+//        int r = pf;
+//        int l = pi;
+//        while (l < r) {
+//            if (goRight) {
+//                if (values[l] > values[r]) {
+//                    swap(values, l, r);
+//                    goRight = false;
+//                } else {
+//                    r--;
+//                }
+//            } else {
+//                if (values[r] < values[l]) {
+//                    swap(values, l, r);
+//                    goRight = true;
+//                } else {
+//                    l++;
+//                }
+//            }
+//        }
+//
+//        //System.out.println(l);
+////        System.out.println(Arrays.toString(Arrays.copyOfRange(values, pi, l)));
+////        System.out.println(Arrays.toString(Arrays.copyOfRange(values, l + 1, pf + 1)));
+//
+//        if (l > pi && l < pf) {
+//            quickSort(values, pi, l - 1);
+//            quickSort(values, l + 1, pf);
+//        } else if (l > pi) {
+//            quickSort(values, pi, l - 1);
+//        } else {
+//            quickSort(values, l + 1, pf);
+//        }
+//        //System.out.println(Arrays.toString(values));
+//    }
+
     public static void quickSort(int[] values, int pi, int pf) {
         if (pi == pf)
             return;
@@ -24,26 +64,17 @@ public class QuickSort {
         int r = pf;
         int l = pi;
         while (l < r) {
-            if (goRight) {
-                if (values[l] > values[r]) {
-                    swap(values, l, r);
-                    goRight = false;
-                } else {
-                    r--;
-                }
+            if (values[l] > values[r]) {
+                swap(values, l, r);
+                goRight = !goRight;
             } else {
-                if (values[r] < values[l]) {
-                    swap(values, l, r);
-                    goRight = true;
+                if (goRight) {
+                    r--;
                 } else {
                     l++;
                 }
             }
         }
-
-        //System.out.println(l);
-//        System.out.println(Arrays.toString(Arrays.copyOfRange(values, pi, l)));
-//        System.out.println(Arrays.toString(Arrays.copyOfRange(values, l + 1, pf + 1)));
 
         if (l > pi && l < pf) {
             quickSort(values, pi, l - 1);
@@ -53,7 +84,6 @@ public class QuickSort {
         } else {
             quickSort(values, l + 1, pf);
         }
-        //System.out.println(Arrays.toString(values));
     }
 
     public static boolean busBin(int[] values, int valueToSearch) {

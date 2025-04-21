@@ -84,15 +84,19 @@ public class BST implements TBPrint {
     public static void main(String[] args) {
         BST t;
 
-//        t = new BST();
-//        t.addAll(19, 7, 10, 16, 20, 8, 9, 13, 40, 4, 9);
+        //t = new BST();
+        //t.addAll(19, 7, 10, 16, 20, 8, 9, 13, 40, 4, 9);
 //        TBPrintUtil.print(t);
 
         t = new BST();
-        for (int i = 0; i < 20; i++) {
-            t.add(i + 1);
-        }
+        t.addAll(19, 6, 13, 16, 30, 8, 10, 15, 40, 4);//, 7, 18, 9, 12);
         TBPrintUtil.print(t);
+
+//        t = new BST();
+//        for (int i = 0; i < 20; i++) {
+//            t.add(i + 1);
+//        }
+//        TBPrintUtil.print(t);
 
 //        t.putChildren(10, 20, 30);
 //        t.putChildren(20, null, 15);
