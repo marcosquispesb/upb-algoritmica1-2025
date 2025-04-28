@@ -12,37 +12,38 @@ import java.util.List;
  */
 public class GraphMA {
 
-    private int[] vertices;
-    private int[][] mAdyacentes;
+    private String[] vertices;
+
+    private int[][] mAdyacencia;
 
     public GraphMA() {
         vertices = null;
-        mAdyacentes = null;
+        mAdyacencia = null;
     }
 
-    public GraphMA(int ...vertices) {
+    public GraphMA(String ...vertices) {
         this.vertices = vertices;
-        this.mAdyacentes = new int[vertices.length][vertices.length];
+        this.mAdyacencia = new int[vertices.length][vertices.length];
     }
 
-    public int getPosVertice(int vertice) {
+    public int getPosVertice(String vertice) {
         for (int i = 0; i < vertices.length; i++) {
-            if (vertices[i] == vertice)
+            if (vertices[i].equals(vertice))
                 return i;
         }
         return -1;
     }
 
-    public void addAristas(int verticeOrigen, int ...adyacentes) {
+    public void addAristas(String verticeOrigen, String ...adyacentes) {
         int posVOrigen = getPosVertice(verticeOrigen);
         if (posVOrigen == -1)
             return;
 
-        for (int adyacente : adyacentes) {
+        for (String adyacente : adyacentes) {
             int posAdyacente = getPosVertice(adyacente);
             if (posAdyacente == -1)
                 continue;
-            mAdyacentes[posVOrigen][posAdyacente] = 1;
+            mAdyacencia[posVOrigen][posAdyacente] = 1;
         }
     }
 
@@ -50,28 +51,28 @@ public class GraphMA {
         int count = 0;
         for (int f = 0; f < vertices.length; f++) {
             for (int c = 0; c < vertices.length; c++) {
-                if (mAdyacentes[f][c] == 1)
+                if (mAdyacencia[f][c] == 1)
                     count++;
             }
         }
         return count;
     }
 
-    public List<Integer> getAdyacentes(int vertice) {
+    public List<String> getAdyacentes(String vertice) {
         int f = getPosVertice(vertice);
-        List<Integer> adyacentes = new ArrayList<>();
+        List<String> adyacentes = new ArrayList<>();
         for (int c = 0; c < vertices.length; c++) {
-            if (mAdyacentes[f][c] == 1)
+            if (mAdyacencia[f][c] == 1)
                 adyacentes.add(vertices[c]);
         }
         return adyacentes;
     }
 
-    public List<Integer> aqsa(int vertice) {
+    public List<String> aqsa(String vertice) {
         int c = getPosVertice(vertice);
-        List<Integer> adyacentes = new ArrayList<>();
+        List<String> adyacentes = new ArrayList<>();
         for (int f = 0; f < vertices.length; f++) {
-            if (mAdyacentes[f][c] == 1)
+            if (mAdyacencia[f][c] == 1)
                 adyacentes.add(vertices[f]);
         }
         return adyacentes;
@@ -79,18 +80,19 @@ public class GraphMA {
 
     public void print() {
         for (int f = 0; f < vertices.length; f++) {
-            System.out.println(Arrays.toString(mAdyacentes[f]));
+            System.out.println(Arrays.toString(mAdyacencia[f]));
         }
     }
 
     public static void main(String[] args) {
-        GraphMA g = new GraphMA(10, 11, 2, 3);
-        g.addAristas(10, 11, 2);
-        g.addAristas(11, 10, 2);
-        g.addAristas(3, 10, 3);
+        GraphMA g = new GraphMA("A", "B", "C", "D");
+        g.addAristas("A", "B", "C");
+        g.addAristas("B", "A");
+        g.addAristas("D", "A", "C", "D");
         g.print();
+
         System.out.println("cantAristas: " + g.countAristas());
-        System.out.println("adyacentes: " + g.getAdyacentes(10));
-        System.out.println("aqsa: " + g.aqsa(10));
+        System.out.println("adyacentes: " + g.getAdyacentes("A"));
+        System.out.println("aqsa: " + g.aqsa("A"));
     }
 }
