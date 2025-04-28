@@ -73,14 +73,14 @@ public class BinaryTree implements TBPrint {
         return getNode(valueToSearch, node.getRight());
     }
 
-    public int getSize2(Node node) {
+    public int getSizeRecursivo(Node node) {
         if (node == null)
             return 0;
         if (node.isLeaf())
             return 1;
 
-        int izq = getSize2(node.getLeft());
-        int der = getSize2(node.getRight());
+        int izq = getSizeRecursivo(node.getLeft());
+        int der = getSizeRecursivo(node.getRight());
         return izq + der + 1;
     }
 
@@ -108,7 +108,7 @@ public class BinaryTree implements TBPrint {
         return 0;
     }
 
-    // retorna true si value1 y value2 tienen el mismo padre
+    // retorna true si value1 y value2 son hijos del mismo padre
     public boolean areSiblings(int value1, int value2, Node node) {
         if (node == null || node.isLeaf())
             return false;
@@ -216,7 +216,7 @@ public class BinaryTree implements TBPrint {
 //        //t.print(t.root);
 //        TBPrintUtil.print(t);
 //        System.out.println();
-//        //System.out.println("size2: " + t.getSize2(t.root));
+//        //System.out.println("size2: " + t.getSizeRecursivo(t.root));
 ////        System.out.println("sum: " + t.sum(t.root));
 ////        System.out.println("max: " + t.max(t.root));
 //        System.out.println("depth: " + t.depth(t.root));

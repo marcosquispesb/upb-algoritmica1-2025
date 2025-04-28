@@ -17,8 +17,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class Node {
-    private int value;
 
+    private int value;
     private List<Node> children;
 
     public Node(int value) {
@@ -36,6 +36,7 @@ public class Node {
         for (Node child : children) {
             childrenStr += child.getValue() + " ";
         }
+        childrenStr = childrenStr.trim();
         return "Node{" +
                 "value=" + value +
                 ", children=[" + childrenStr + "]" +

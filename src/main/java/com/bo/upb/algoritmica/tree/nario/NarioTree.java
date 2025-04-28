@@ -51,6 +51,19 @@ public class NarioTree {
         return null;
     }
 
+    public int getSizeRecursivo(Node node) {
+        if (node == null)
+            return 0;
+        if (node.isLeaf())
+            return 1;
+
+        int result = 0;
+        for (Node child : node.getChildren()) {
+            result += getSizeRecursivo(child);
+        }
+        return result + 1;
+    }
+
     // 175
     public int sum(Node node) {
         if (node == null)
@@ -108,6 +121,7 @@ public class NarioTree {
         t.putChildren(30, 33, 39);
         t.print(t.root);
         System.out.println();
+        System.out.println("getSizeRecursivo : " + t.getSizeRecursivo(t.root));
         System.out.println("sum: " + t.sum(t.root));
         System.out.println("max: " + t.max(t.root));
     }

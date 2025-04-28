@@ -1,4 +1,4 @@
-package com.bo.upb.algoritmica.graph;
+package com.bo.upb.algoritmica.graph.graphma;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,10 +23,6 @@ public class GraphMA {
     public GraphMA(int ...vertices) {
         this.vertices = vertices;
         this.mAdyacentes = new int[vertices.length][vertices.length];
-//        this.vertices = new int[vertices.length];
-//        for (int i = 0; i < vertices.length; i++) {
-//            this.vertices[i] = vertices[i];
-//        }
     }
 
     public int getPosVertice(int vertice) {
@@ -72,7 +68,13 @@ public class GraphMA {
     }
 
     public List<Integer> aqsa(int vertice) {
-        return null;
+        int c = getPosVertice(vertice);
+        List<Integer> adyacentes = new ArrayList<>();
+        for (int f = 0; f < vertices.length; f++) {
+            if (mAdyacentes[f][c] == 1)
+                adyacentes.add(vertices[f]);
+        }
+        return adyacentes;
     }
 
     public void print() {
@@ -89,5 +91,6 @@ public class GraphMA {
         g.print();
         System.out.println("cantAristas: " + g.countAristas());
         System.out.println("adyacentes: " + g.getAdyacentes(10));
+        System.out.println("aqsa: " + g.aqsa(10));
     }
 }
