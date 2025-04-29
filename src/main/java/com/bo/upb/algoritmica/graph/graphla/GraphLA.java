@@ -25,14 +25,39 @@ public class GraphLA {
         vlAristas = new ArrayList[MAX_VERTICES];
     }
 
-    // EXPLICACION ESTRUCTURA GRAFO
-    // vertices                                arreglo
-    // vertices[0]                             Vertice
-    // vertices[0].getValue()                  String
-    // vlAristas                               arreglo
-    // vlAristas[0]                            Lista
-    // vlAristas[0].get(1)                     Arista
-    // vlAristas[0].get(1).getPosVDestino()    int
+    private void explicacionEstructura() {
+        // EXPLICACION ESTRUCTURA GRAFO
+        // vertices                                arreglo
+        // vertices[0]                             Vertice
+        // vertices[0].getValue()                  String
+        // vlAristas                               arreglo
+        // vlAristas[0]                            Lista
+        // vlAristas[0].get(1)                     Arista
+        // vlAristas[0].get(1).getPosVDestino()    int
+
+        // iterando los vertices
+        // cantidadVertices define la cantidad de vertices en el grafo
+        for (int i = 0; i < cantidadVertices; i++) {
+            Vertice v = vertices[i];
+            String value = vertices[i].getValue();
+            System.out.println(value);
+        }
+
+        // iterando las aristas del vertice en la posicion 0
+        for (Arista arista : vlAristas[0]) {
+            int posVDestino = arista.getPosVDestino();
+            System.out.println(vertices[posVDestino].getValue());
+        }
+
+        // iterando los vertices
+        for (int i = 0; i < cantidadVertices; i++) {
+            // iterando las aristas para cada vertice
+            for (Arista arista : vlAristas[i]) {
+
+            }
+        }
+
+    }
 
     public boolean existVertice(String vertice) {
         for (int i = 0; i < cantidadVertices; i++) {
@@ -87,6 +112,29 @@ public class GraphLA {
         vlAristas[posVOrigen].add(new Arista(posVDestino, null));
     }
 
+    public void addAristasBI(String vOrigen, String ...vDestinos) {
+        int posVOrigen = getPosVertice(vOrigen);
+        if (posVOrigen == -1) {
+            System.err.println("ERROR: el vertice: " + vOrigen + " no fue encontrado");
+            return;
+        }
+        for (String vDestino : vDestinos) {
+            int posVDestino = getPosVertice(vDestino);
+            if (posVDestino == -1) {
+                System.err.println("ERROR: el vertice: " + vDestino + " no fue encontrado");
+                continue;
+            }
+
+            boolean existArista = vlAristas[posVOrigen].stream().map(Arista::getPosVDestino).anyMatch(x -> x == posVDestino);
+            if (!existArista)
+                vlAristas[posVOrigen].add(new Arista(posVDestino, null));
+
+            existArista = vlAristas[posVDestino].stream().map(Arista::getPosVDestino).anyMatch(x -> x == posVOrigen);
+            if (!existArista)
+                vlAristas[posVDestino].add(new Arista(posVOrigen, null));
+        }
+    }
+
     public int getPosVertice(String vertice) {
         for (int i = 0; i < cantidadVertices; i++) {
             if (vertices[i].getValue().equalsIgnoreCase(vertice)) {
@@ -110,7 +158,9 @@ public class GraphLA {
     }
 
     public static void main(String[] args) {
-        GraphLA g = new GraphLA();
+        GraphLA g;
+
+        g = new GraphLA();
         g.addVertices("A", "B", "C", "D");
         g.addAristas("A", "B", "C");
         g.addAristas("B", "A");

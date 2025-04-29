@@ -91,8 +91,8 @@ public class GraphMA {
         g.addAristas("D", "A", "C", "D");
         g.print();
 
-        System.out.println("cantAristas: " + g.countAristas());
-        System.out.println("adyacentes: " + g.getAdyacentes("A"));
-        System.out.println("aqsa: " + g.aqsa("A"));
+        System.out.println("cantAristas:  " + g.countAristas());
+        System.out.println("adyacentes A: " + g.getAdyacentes("A"));
+        System.out.println("aqsa A:       " + g.aqsa("A"));
     }
 }
