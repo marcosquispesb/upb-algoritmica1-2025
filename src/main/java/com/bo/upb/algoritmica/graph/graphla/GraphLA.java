@@ -144,6 +144,62 @@ public class GraphLA {
         return -1;
     }
 
+    public void deleteVertice(String vertice) {
+        int posVerticeDelete = getPosVertice(vertice);
+
+        // eliminar aristas igual a posVerticeDelete
+        for (int i = 0; i < cantidadVertices; i++) {
+            for (int j = 0; j < vlAristas[i].size(); j++) {
+                Arista arista = vlAristas[i].get(j);
+                if (arista.getPosVDestino() == posVerticeDelete) {
+                    vlAristas[i].remove(j);
+                    break;
+                }
+            }
+        }
+
+        // recorrer hacia atras desde posVerticeDelete + 1
+        for (int i = posVerticeDelete + 1; i < cantidadVertices; i++) {
+            vertices[i - 1] = vertices[i];
+            vlAristas[i - 1] = vlAristas[i];
+        }
+
+        // eliminar los ultimos elementos
+        vertices[cantidadVertices - 1] = null;
+        vlAristas[cantidadVertices - 1] = null;
+        cantidadVertices--;
+
+        // decrementar en 1 los posVDestino > que posVerticeDelete
+        for (int i = 0; i < cantidadVertices; i++) {
+            for (Arista arista : vlAristas[i]) {
+                if (arista.getPosVDestino() > posVerticeDelete)
+                    arista.setPosVDestino(arista.getPosVDestino() - 1);
+            }
+        }
+    }
+
+    public List<String> aqsa(String vertice) {
+        return null;
+    }
+
+    public List<String> solitarios() {
+        return null;
+    }
+
+    public boolean esGrafoNoDirigido() {
+        // implement
+        return false;
+    }
+
+    public void deleteBucles() {
+        // implement
+    }
+
+    public int countAristasBI() {
+        // implement
+        return 0;
+    }
+
     public void print() {
         String line;
         for (int i = 0; i < cantidadVertices; i++) {
@@ -160,11 +216,22 @@ public class GraphLA {
     public static void main(String[] args) {
         GraphLA g;
 
+//        g = new GraphLA();
+//        g.addVertices("A", "B", "C", "D");
+//        g.addAristas("A", "B", "C");
+//        g.addAristas("B", "A");
+//        g.addAristas("D", "A", "C", "D");
+//        g.print();
+//
+//        System.out.println();
+//        g.deleteVertice("B");
+//        g.print();
+
         g = new GraphLA();
         g.addVertices("A", "B", "C", "D");
-        g.addAristas("A", "B", "C");
-        g.addAristas("B", "A");
-        g.addAristas("D", "A", "C", "D");
+        g.addAristasBI("A", "B", "D");
+        //g.addAristasBI("B", "D");
+        g.addAristasBI("D", "B", "C");
         g.print();
     }
 }
