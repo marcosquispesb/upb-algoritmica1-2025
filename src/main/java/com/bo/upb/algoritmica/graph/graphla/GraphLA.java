@@ -1,6 +1,8 @@
 package com.bo.upb.algoritmica.graph.graphla;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -178,8 +180,32 @@ public class GraphLA {
         }
     }
 
+
     public List<String> aqsa(String vertice) {
-        return null;
+        int posVertice = getPosVertice(vertice);
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < cantidadVertices; i++) {
+            for (Arista arista : vlAristas[i]) {
+                if (arista.getPosVDestino() == posVertice) {
+                    result.add(vertices[i].getValue());
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    private List<Integer> aqsa(int posVertice) {
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < cantidadVertices; i++) {
+            for (Arista arista : vlAristas[i]) {
+                if (arista.getPosVDestino() == posVertice) {
+                    result.add(i);
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     public List<String> solitarios() {
@@ -200,6 +226,73 @@ public class GraphLA {
         return 0;
     }
 
+    public void desmarcarTodos() {
+        for (int i = 0; i < cantidadVertices; i++) {
+            vertices[i].setMarcado(false);
+        }
+    }
+    public void marcar(int i) {
+        vertices[i].setMarcado(true);
+    }
+    public void desmarcar(int i) {
+        vertices[i].setMarcado(false);
+    }
+    public boolean isMarcado(int i) {
+        return vertices[i].isMarcado();
+    }
+    private boolean estanTodosMarcados() {
+        for (int i = 0; i < cantidadVertices; i++) {
+            if (!isMarcado(i))
+                return false;
+        }
+        return true;
+    }
+
+    public void dfs() {
+        desmarcarTodos();
+        for (int i = 0; i < cantidadVertices; i++) {
+            if (!isMarcado(i)) {
+                System.out.println("dfs principal: " + i);
+                dfs(i);
+            }
+        }
+    }
+    public void dfs(int u) {
+        marcar(u);
+        for (Arista arista : vlAristas[u]) {
+            int v = arista.getPosVDestino();
+            if (!isMarcado(v))
+                dfs(v);
+        }
+    }
+
+    public boolean hayCamino(int u, int v) {
+        desmarcarTodos();
+        dfs(u);
+        return isMarcado(v);
+    }
+
+    public void dfsConectados(int u) {
+        marcar(u);
+        for (Arista arista : vlAristas[u]) {
+            int v = arista.getPosVDestino();
+            if (!isMarcado(v))
+                dfsConectados(v);
+        }
+
+        for (Integer w : aqsa(u)) {
+            if (!isMarcado(w))
+                dfsConectados(w);
+        }
+    }
+
+    // estanTodosConectados
+    public boolean esConexo() {
+        desmarcarTodos();
+        dfsConectados(0);
+        return estanTodosMarcados();
+    }
+
     public void print() {
         String line;
         for (int i = 0; i < cantidadVertices; i++) {
@@ -209,6 +302,7 @@ public class GraphLA {
                 aristas += " -> " + vertices[posVDestino].getValue();
             }
             line = String.format("[%s]%s", vertices[i].getValue(), aristas);
+            line = (isMarcado(i) ? "." : " ") + line;
             System.out.println(line);
         }
     }
@@ -227,11 +321,61 @@ public class GraphLA {
 //        g.deleteVertice("B");
 //        g.print();
 
+//        g = new GraphLA();
+//        g.addVertices("A", "B", "C", "D");
+//        g.addAristasBI("A", "B", "D");
+//        //g.addAristasBI("B", "D");
+//        g.addAristasBI("D", "B", "C");
+//        g.print();
+
+//        g = new GraphLA();
+//        g.addVertices("0", "1", "2", "3", "4", "5", "6");
+//        g.addAristasBI("0", "1", "2", "3");
+//        g.addAristasBI("2", "3");
+//        g.addAristasBI("4", "6");
+//        System.out.println();
+//        g.dfs();
+//        g.print();
+
+//        g = new GraphLA();
+//        g.addVertices("0", "1", "2", "3", "4", "5", "6");
+//        g.addAristas("0", "1", "3");;
+//        g.addAristas("3", "2", "4");
+//        g.addAristas("4", "6");
+//        g.addAristas("6", "4", "5");
+        //System.out.println("hayCamino: " + g.hayCamino(1, 5));
+//        g.print();
+//        System.out.println();
+
         g = new GraphLA();
-        g.addVertices("A", "B", "C", "D");
-        g.addAristasBI("A", "B", "D");
-        //g.addAristasBI("B", "D");
-        g.addAristasBI("D", "B", "C");
+        g.addVertices("0", "1", "2", "3", "4", "5", "6");
+        g.addAristas("0", "1", "3");;
+        g.addAristas("3", "2");
+        g.addAristas("4", "3", "6");
+        g.addAristas("6", "4");
+        g.addAristas("5", "6");
+        System.out.println("esConexo: " + g.esConexo());
         g.print();
+        System.out.println();
+        //System.out.println("aqsa: " + g.aqsa("3"));
+
+//        List<String> list = new ArrayList<>(Arrays.asList("A", "B", "C"));
+//        int i = 0;
+//        for (String s : list) {
+//            if (i == 0) {
+//                list.remove(i);
+//            }
+//            i++;
+//        }
+//        System.out.println(list);
+//        for (int j = 0; j < list.size(); j++) {
+//            System.out.println(list.get(j));
+//            if (i == 0) {
+//                list.remove(i);
+//                j--;
+//            }
+//            i++;
+//        }
+//        System.out.println(list);
     }
 }
