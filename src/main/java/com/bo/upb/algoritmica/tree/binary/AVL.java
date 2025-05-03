@@ -77,7 +77,6 @@ public class AVL implements TBPrint {
     }
 
     private Node rotateLeft(Node node) { // der desbalanceado
-        System.out.println("rotateLeft: " + node.getValue());
         Node child = node.getRight();
 
         int dChildLeft = depth(child.getLeft());
@@ -86,6 +85,7 @@ public class AVL implements TBPrint {
             node.setRight(rotateRight(child));
             child = node.getRight();
         }
+        System.out.println("rotateLeft: " + node.getValue());
 
         Node auxChildLeft = child.getLeft();
         child.setLeft(node);
@@ -93,7 +93,6 @@ public class AVL implements TBPrint {
         return child;
     }
     private Node rotateRight(Node node) { // izq desbalanceado
-        System.out.println("rotateRight: " + node.getValue());
         Node child = node.getLeft();
 
         int dChildLeft = depth(child.getLeft());
@@ -102,6 +101,7 @@ public class AVL implements TBPrint {
             node.setLeft(rotateLeft(child));
             child = node.getLeft();
         }
+        System.out.println("rotateRight: " + node.getValue());
 
         Node auxChildRight = child.getRight();
         child.setRight(node);
