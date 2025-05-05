@@ -293,6 +293,64 @@ public class GraphLA {
         return estanTodosMarcados();
     }
 
+    public boolean hayCircuito(String vertice) {
+        int posV = getPosVertice(vertice);
+        if(posV == -1)
+            return false;
+
+        desmarcarTodos();
+        marcar(posV);
+        for (Arista arista : vlAristas[posV]) {
+            if (hayCircuito(arista.getPosVDestino(), posV, 0))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean hayCircuito(int actual, int origen, int contador) {
+        marcar(actual);
+        contador = contador + 1;
+
+        for (Arista arista : vlAristas[actual]) {
+            int posVAdyacente = arista.getPosVDestino();
+            if (posVAdyacente == actual) // bucle
+                continue;
+
+            if (posVAdyacente == origen && contador + 1 >= 3) // circuito encontrado con las de 2 aristas
+                return true;
+
+            if (!isMarcado(posVAdyacente))
+                if (hayCircuito(posVAdyacente, origen, contador)) // recorrer adyacentes no marcados
+                    return true;
+        }
+        return false;
+    }
+
+    public int caminoLargo(String origen, String destino) {
+        int posOrigen = getPosVertice(origen);
+        int posDestino = getPosVertice(destino);
+        if (posOrigen == -1 || posDestino == -1)
+            return -1;
+
+        desmarcarTodos();
+        return dfsCaminoLargo(posOrigen, posDestino, 0);
+    }
+    public int dfsCaminoLargo(int actual, int destino, int contador) {
+        if (actual == destino)
+            return contador;
+
+        marcar(actual);
+        int result = 0;
+        for (Arista arista : vlAristas[actual]) {
+            int v = arista.getPosVDestino();
+            if (!isMarcado(v)) {
+                int caminoAdyacente = dfsCaminoLargo(v, destino, contador + 1);
+                result = Math.max(result, caminoAdyacente);
+            }
+        }
+        return result;
+    }
+
     public void print() {
         String line;
         for (int i = 0; i < cantidadVertices; i++) {
@@ -347,17 +405,54 @@ public class GraphLA {
 //        g.print();
 //        System.out.println();
 
-        g = new GraphLA();
-        g.addVertices("0", "1", "2", "3", "4", "5", "6");
-        g.addAristas("0", "1", "3");;
-        g.addAristas("3", "2");
-        g.addAristas("4", "3", "6");
-        g.addAristas("6", "4");
-        g.addAristas("5", "6");
-        System.out.println("esConexo: " + g.esConexo());
-        g.print();
-        System.out.println();
+//        g = new GraphLA();
+//        g.addVertices("0", "1", "2", "3", "4", "5", "6");
+//        g.addAristas("0", "1", "3");;
+//        g.addAristas("3", "2");
+//        g.addAristas("4", "3", "6");
+//        g.addAristas("6", "4");
+//        g.addAristas("5", "6");
+//        System.out.println("esConexo: " + g.esConexo());
+//        g.print();
+//        System.out.println();
         //System.out.println("aqsa: " + g.aqsa("3"));
+
+        g = new GraphLA();
+//        g.addVertices("0", "1", "2", "3", "4");
+//        g.addAristas("0", "1", "3");;
+//        g.addAristas("1", "1");
+//        g.addAristas("2", "0", "3");
+//        g.addAristas("3", "0", "3", "4");
+//        g.addAristas("4", "2");
+
+//        g.addVertices("0", "1", "2", "3", "4");
+//        g.addAristas("0", "1", "3");;
+//        g.addAristas("1", "1");
+//        g.addAristas("2", "0", "3");
+//        g.addAristas("3", "0");
+//        g.addAristas("4", "2");
+//        g.print();
+//        System.out.println(g.hayCircuito("0"));
+//        System.out.println(g.hayCircuito("3"));
+//        System.out.println(g.hayCircuito("1"));
+
+        g = new GraphLA();
+//        g.addVertices("0", "1", "2", "3", "4", "5", "6");
+//        g.addAristas("0", "1", "3", "5");
+//        g.addAristas("3", "2", "4");
+//        g.addAristas("4", "4", "5", "6");
+//        g.addAristas("6", "4", "5");
+        g.addVertices("0", "1", "2", "3", "4", "5", "6");
+        g.addAristas("0", "1", "3", "5");
+        g.addAristas("1", "2");
+        g.addAristas("2", "6");
+        g.addAristas("3", "2", "4");
+        g.addAristas("4", "4", "5", "6");
+        g.addAristas("6", "4", "5");
+        g.print();
+        System.out.println("caminoLargo: " + g.caminoLargo("0", "5"));
+
+
 
 //        List<String> list = new ArrayList<>(Arrays.asList("A", "B", "C"));
 //        int i = 0;
