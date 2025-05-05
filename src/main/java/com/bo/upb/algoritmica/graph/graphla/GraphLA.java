@@ -346,6 +346,7 @@ public class GraphLA {
             if (!isMarcado(v)) {
                 int caminoAdyacente = dfsCaminoLargo(v, destino, contador + 1);
                 result = Math.max(result, caminoAdyacente);
+                desmarcar(v);
             }
         }
         return result;
@@ -444,11 +445,9 @@ public class GraphLA {
 //        g.addAristas("6", "4", "5");
         g.addVertices("0", "1", "2", "3", "4", "5", "6");
         g.addAristas("0", "1", "3", "5");
-        g.addAristas("1", "2");
-        g.addAristas("2", "6");
-        g.addAristas("3", "2", "4");
-        g.addAristas("4", "4", "5", "6");
-        g.addAristas("6", "4", "5");
+        g.addAristas("3", "2", "4", "6");
+        g.addAristas("4", "4", "5");
+        g.addAristas("6", "3", "4", "5");
         g.print();
         System.out.println("caminoLargo: " + g.caminoLargo("0", "5"));
 
