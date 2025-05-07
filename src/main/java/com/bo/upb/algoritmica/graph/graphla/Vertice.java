@@ -19,7 +19,18 @@ public class Vertice {
 
     private boolean marcado;
 
+    // para Dijsktra
+    private Double dijPesoAcumulado;
+    private int dijPosVPredecesor;
+    private int dijLongitudAcumulada;
+
     public Vertice(String value) {
         this.value = value;
+    }
+
+    public void setDijkstraValues(Double pesoAcumulado, int posVPredecesor, int longitudAcumulada) {
+        this.dijPesoAcumulado = pesoAcumulado;
+        this.dijPosVPredecesor = posVPredecesor;
+        this.dijLongitudAcumulada = longitudAcumulada;
     }
 }

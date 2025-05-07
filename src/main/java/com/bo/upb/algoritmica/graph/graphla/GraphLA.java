@@ -100,6 +100,9 @@ public class GraphLA {
         }
     }
     public void addArista(String vOrigen, String vDestino) {
+        addArista(vOrigen, vDestino, null);
+    }
+    public void addArista(String vOrigen, String vDestino, Double peso) {
         int posVOrigen = getPosVertice(vOrigen);
         int posVDestino = getPosVertice(vDestino);
         if (posVOrigen == -1 || posVDestino == -1) {
@@ -111,7 +114,7 @@ public class GraphLA {
         if (existArista)
             return;
 
-        vlAristas[posVOrigen].add(new Arista(posVDestino, null));
+        vlAristas[posVOrigen].add(new Arista(posVDestino, peso));
     }
 
     public void addAristasBI(String vOrigen, String ...vDestinos) {
@@ -135,6 +138,28 @@ public class GraphLA {
             if (!existArista)
                 vlAristas[posVDestino].add(new Arista(posVOrigen, null));
         }
+    }
+
+    public void addAristaBI(String vOrigen, String vDestino, Double peso) {
+        int posVOrigen = getPosVertice(vOrigen);
+        if (posVOrigen == -1) {
+            System.err.println("ERROR: el vertice: " + vOrigen + " no fue encontrado");
+            return;
+        }
+
+        int posVDestino = getPosVertice(vDestino);
+        if (posVDestino == -1) {
+            System.err.println("ERROR: el vertice: " + vDestino + " no fue encontrado");
+            return;
+        }
+
+        boolean existArista = vlAristas[posVOrigen].stream().map(Arista::getPosVDestino).anyMatch(x -> x == posVDestino);
+        if (!existArista)
+            vlAristas[posVOrigen].add(new Arista(posVDestino, peso));
+
+        existArista = vlAristas[posVDestino].stream().map(Arista::getPosVDestino).anyMatch(x -> x == posVOrigen);
+        if (!existArista)
+            vlAristas[posVDestino].add(new Arista(posVOrigen, peso));
     }
 
     public int getPosVertice(String vertice) {
@@ -352,6 +377,37 @@ public class GraphLA {
         return result;
     }
 
+    public Integer getPosVConMenorPesoAcum() {
+        return null;
+    }
+    public Double dijkstra(String vOrigen, String vDestino) {
+        int posVOrigen = getPosVertice(vOrigen);
+        int posVDestino = getPosVertice(vDestino);
+        if (posVOrigen == -1 || posVDestino == -1)
+            return null;
+
+        vertices[posVOrigen].setDijkstraValues(0d, -1, 0);
+
+        Integer u = getPosVConMenorPesoAcum();
+        while(u != null) {
+            for (Arista arista : vlAristas[u]) {
+                int v = arista.getPosVDestino();
+                if (isMarcado(v))
+                    continue;
+
+                Double nuevoPesoAcum = vertices[u].getDijPesoAcumulado() + arista.getPeso();
+                if (vertices[v].getDijPesoAcumulado() == null || nuevoPesoAcum < vertices[v].getDijPesoAcumulado()) {
+                    vertices[v].setDijkstraValues(nuevoPesoAcum, u, vertices[u].getDijLongitudAcumulada() + 1);
+                }
+            }
+            marcar(u);
+
+            u = getPosVConMenorPesoAcum();
+        }
+
+        return vertices[posVDestino].getDijPesoAcumulado();
+    }
+
     public void print() {
         String line;
         for (int i = 0; i < cantidadVertices; i++) {
@@ -437,21 +493,27 @@ public class GraphLA {
 //        System.out.println(g.hayCircuito("3"));
 //        System.out.println(g.hayCircuito("1"));
 
-        g = new GraphLA();
+//        g = new GraphLA();
 //        g.addVertices("0", "1", "2", "3", "4", "5", "6");
 //        g.addAristas("0", "1", "3", "5");
 //        g.addAristas("3", "2", "4");
 //        g.addAristas("4", "4", "5", "6");
 //        g.addAristas("6", "4", "5");
-        g.addVertices("0", "1", "2", "3", "4", "5", "6");
-        g.addAristas("0", "1", "3", "5");
-        g.addAristas("3", "2", "4", "6");
-        g.addAristas("4", "4", "5");
-        g.addAristas("6", "3", "4", "5");
-        g.print();
-        System.out.println("caminoLargo: " + g.caminoLargo("0", "5"));
-
-
+//        g.addVertices("0", "1", "2", "3", "4", "5", "6");
+//        g.addAristas("0", "1", "3", "5");
+//        g.addAristas("3", "2", "4", "6");
+//        g.addAristas("4", "4", "5");
+//        g.addAristas("6", "3", "4", "5");
+//        g.print();
+//        System.out.println("caminoLargo: " + g.caminoLargo("0", "5"));
+//
+//        g = new GraphLA();
+//        g.addVertices("0", "1", "2", "3", "4");
+//        g.addAristas("0", "1", "3");
+//        g.addAristas("1", "4");
+//        g.addAristas("2", "0");
+//        g.addAristas("3", "0", "2", "3");
+//        g.addAristas("4", "3");
 
 //        List<String> list = new ArrayList<>(Arrays.asList("A", "B", "C"));
 //        int i = 0;
@@ -471,5 +533,21 @@ public class GraphLA {
 //            i++;
 //        }
 //        System.out.println(list);
+
+        g = new GraphLA();
+        g.addVertices("A", "B", "C", "D", "E", "F", "G", "H");
+        g.addAristaBI("A", "C", 1d);
+        g.addAristaBI("A", "B", 3d);
+        g.addAristaBI("B", "D", 1d);
+        g.addAristaBI("B", "G", 5d);
+        g.addAristaBI("C", "D", 2d);
+        g.addAristaBI("C", "F", 5d);
+        g.addAristaBI("D", "F", 2d);
+        g.addAristaBI("D", "E", 4d);
+        g.addAristaBI("E", "G", 2d);
+        g.addAristaBI("E", "H", 1d);
+        g.addAristaBI("F", "H", 3d);
+        g.print();
+        System.out.println("dij menor distancia: " + g.dijkstra("A", "H"));
     }
 }
