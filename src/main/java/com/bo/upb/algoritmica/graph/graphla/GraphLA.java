@@ -377,7 +377,7 @@ public class GraphLA {
         return result;
     }
 
-    public Integer getPosVMenorPesoAcumulado() {
+    public Integer getPosVConMenorPesoAcum() {
         Integer posVResult = null;
         Double pesoMinResult = Double.MAX_VALUE;
         for (int i = 0; i < cantidadVertices; i++) {
@@ -414,7 +414,7 @@ public class GraphLA {
             }
             marcar(u);
 
-            u = getPosVMenorPesoAcumulado();
+            u = getPosVConMenorPesoAcum();
         }
 
         return vertices[posVDestino].getDijPesoAcumulado();
