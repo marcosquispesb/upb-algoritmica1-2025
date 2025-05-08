@@ -377,8 +377,19 @@ public class GraphLA {
         return result;
     }
 
-    public Integer getPosVConMenorPesoAcum() {
-        return null;
+    public Integer getPosVMenorPesoAcumulado() {
+        Integer posVResult = null;
+        Double pesoMinResult = Double.MAX_VALUE;
+        for (int i = 0; i < cantidadVertices; i++) {
+            Vertice v = vertices[i];
+            if (!isMarcado(i) && v.getDijPesoAcumulado() != null) {
+                if (v.getDijPesoAcumulado() < pesoMinResult) {
+                    pesoMinResult = v.getDijPesoAcumulado();
+                    posVResult = i;
+                }
+            }
+        }
+        return posVResult;
     }
     public Double dijkstra(String vOrigen, String vDestino) {
         int posVOrigen = getPosVertice(vOrigen);
@@ -386,9 +397,10 @@ public class GraphLA {
         if (posVOrigen == -1 || posVDestino == -1)
             return null;
 
+        desmarcarTodos();
         vertices[posVOrigen].setDijkstraValues(0d, -1, 0);
 
-        Integer u = getPosVConMenorPesoAcum();
+        Integer u = posVOrigen;
         while(u != null) {
             for (Arista arista : vlAristas[u]) {
                 int v = arista.getPosVDestino();
@@ -402,7 +414,7 @@ public class GraphLA {
             }
             marcar(u);
 
-            u = getPosVConMenorPesoAcum();
+            u = getPosVMenorPesoAcumulado();
         }
 
         return vertices[posVDestino].getDijPesoAcumulado();
@@ -417,7 +429,17 @@ public class GraphLA {
                 aristas += " -> " + vertices[posVDestino].getValue();
             }
             line = String.format("[%s]%s", vertices[i].getValue(), aristas);
-            line = (isMarcado(i) ? "." : " ") + line;
+            String dij = "[ , ]( )";
+            if (vertices[i].getDijPesoAcumulado() != null) {
+                String predecesor = " ";
+                if (vertices[i].getDijPosVPredecesor() > -1)
+                    predecesor = vertices[vertices[i].getDijPosVPredecesor()].getValue();
+                dij = String.format("[%s,%s](%s)", vertices[i].getDijPesoAcumulado()
+                        , predecesor, vertices[i].getDijLongitudAcumulada());
+            }
+            line = (isMarcado(i) ? "." : " ")
+                    + dij
+                    + line;
             System.out.println(line);
         }
     }
@@ -547,7 +569,24 @@ public class GraphLA {
         g.addAristaBI("E", "G", 2d);
         g.addAristaBI("E", "H", 1d);
         g.addAristaBI("F", "H", 3d);
-        g.print();
         System.out.println("dij menor distancia: " + g.dijkstra("A", "H"));
+        g.print();
+
+//        g = new GraphLA();
+//        g.addVertices("A", "B", "C", "D", "E", "F", "G");
+//        g.addAristaBI("A", "B", 3d);
+//        g.addAristaBI("A", "C", 2d);
+//        g.addAristaBI("A", "D", 4d);
+//        g.addAristaBI("B", "C", 1d);
+//        g.addAristaBI("B", "E", 8d);
+//        g.addAristaBI("C", "E", 3d);
+//        g.addAristaBI("C", "F", 5d);
+//        g.addAristaBI("C", "D", 2d);
+//        g.addAristaBI("D", "F", 2d);
+//        g.addAristaBI("E", "F", 3d);
+//        g.addAristaBI("E", "G", 1d);
+//        g.addAristaBI("F", "G", 6d);
+//        System.out.println("dij menor distancia: " + g.dijkstra("A", "G"));
+        g.print();
     }
 }
